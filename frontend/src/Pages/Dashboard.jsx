@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {getAnalytics} from "../services/api"
 
 const Dashboard = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -8,9 +9,7 @@ const Dashboard = () => {
 
   const fetchAnalytics = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/analytics", {
-        withCredentials: true,
-      });
+      const { data } = await getAnalytics()
       console.log("Im in dashboard.jsx");
       console.log(data);
       setAnalytics(data);
