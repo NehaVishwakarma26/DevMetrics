@@ -57,7 +57,9 @@ const token=jwt.sign({id:user._id,username:user.username},process.env.JWT_SECRET
     expiresIn:"1h"
 })
 
-res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+res.cookie("token", token, { httpOnly: true,
+  sameSite: "None",
+  secure: true });
 res.redirect("https://dev-metrics-five.vercel.app/dashboard");
 
 
