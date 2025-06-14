@@ -10,12 +10,12 @@ import {
 
 const Sidebar = () => {
   const linkClasses = ({ isActive }) =>
-    `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-      isActive ? "bg-blue-100 text-blue-600 font-semibold" : "text-gray-700 hover:bg-gray-100"
+    `flex items-center gap-3 px-4 py-2 rounded-lg transition  ${
+      isActive ? "bg-blue-100 text-blue-600 font-semibold" : "text-white-700 hover:bg-gray-100"
     }`;
 
   return (
-    <aside className="w-64 min-h-screen bg-white border-r p-4">
+    <aside className="w-64 min-h-screen bg-gray-900 border-r p-4">
       <div className="space-y-2">
         <NavLink to="/dashboard" className={linkClasses}>
           <LayoutDashboard size={20} />

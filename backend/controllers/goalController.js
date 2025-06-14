@@ -1,5 +1,5 @@
 const Goal = require("../models/Goal");
-const GoalHistory = require("../models/GoalHistory");
+const GoalHistory = require("../models/goalHistory");
 const GitHubStat=require("../models/GitHubStat")
 // Set or Update Daily Commit & Weekly PR Goals
 const setOrUpdateGoal = async (req, res) => {
@@ -142,11 +142,34 @@ const weeklyComplete = totalPRs >= goal.weeklyPRGoal;
   }
 }
 
+const getWeeklyPRStats = async (req, res) => {
+  try {
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 6); // inclusive of today
+
+    const stats = await GitHubStat.find({
+      user: req.user._id,
+      date: { $gte: sevenDaysAgo.toISOString().split("T")[0] }
+    }).sort({ date: 1 });
+
+    const formatted = stats.map(stat => ({
+      date: stat.date.toISOString().split("T")[0],
+      pullRequests: stat.pullRequests || 0
+    }));
+
+    res.status(200).json({ data: formatted });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch PR stats", error: err.message });
+  }
+};
+
 
 module.exports = {
   setOrUpdateGoal,
   getUserGoal,
   deleteGoal,
   getGoalHistory,
-  checkGoalCompletion
+  checkGoalCompletion,
+  getWeeklyPRStats
 };

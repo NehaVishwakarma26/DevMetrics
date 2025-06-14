@@ -6,7 +6,8 @@ const {
   getUserGoal,
   deleteGoal,
   getGoalHistory,
-  checkGoalCompletion
+  checkGoalCompletion,
+    getWeeklyPRStats
 } = require("../controllers/goalController");
 
 router.use(requireAuth); // Protect routes
@@ -16,5 +17,6 @@ router.post("/set", setOrUpdateGoal);
 router.delete("/", deleteGoal); 
 router.get("/history", getGoalHistory);
 router.get("/check",checkGoalCompletion)
+router.get("/pr-stats-week",getWeeklyPRStats)
 
 module.exports = router;

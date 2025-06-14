@@ -32,7 +32,7 @@ const trackCommitHistory = async (req, res) => {
     const user = req.user;
     const githubUsername = user.username;
 
-    console.log("➡️  trackCommitHistory triggered for", githubUsername);
+    // console.log("➡️  trackCommitHistory triggered for", githubUsername);
 
     const reposResponse = await axios.get(`https://api.github.com/users/${githubUsername}/repos`, {
       headers: {
@@ -61,7 +61,6 @@ sinceDate.setDate(sinceDate.getDate() - sinceDays);
             },
             params: {
               since: sinceDate.toISOString()
-              // 🔁 REMOVED 'author' to avoid mismatch
             }
           }
         );
@@ -77,14 +76,14 @@ sinceDate.setDate(sinceDate.getDate() - sinceDays);
       }
     }
 
-    console.log("📅 Commit Counts:", commitCounts);
+    // console.log("📅 Commit Counts:", commitCounts);
 
     if (Object.keys(commitCounts).length === 0) {
       return res.status(200).json({ message: "No commits found in the date range." });
     }
 
     for (const [date, count] of Object.entries(commitCounts)) {
-      console.log("💾 Saving to DB:", { date, count });
+      // console.log("💾 Saving to DB:", { date, count });
 
       await CommitHistory.findOneAndUpdate(
         { user: user._id, date: new Date(date) },
@@ -93,9 +92,9 @@ sinceDate.setDate(sinceDate.getDate() - sinceDays);
       );
     }
 
-    res.status(200).json({ message: "✅ Commit history updated", commitCounts });
+    res.status(200).json({ message: "Commit history updated", commitCounts });
   } catch (err) {
-    console.error("❌ Error in trackCommitHistory:", err.message);
+    console.error(" Error in trackCommitHistory:", err.message);
     res.status(500).json({ message: "Error tracking commit history", error: err.message });
   }
 };
@@ -114,7 +113,7 @@ const getHeatmapAndStreaks = async (req, res) => {
       date: { $gte: startDate, $lte: today }
     });
 
-    console.log("🧾 History from DB:", history);
+    // console.log(" History from DB:", history);
 
     const commitMap = new Map();
     for (const entry of history) {
@@ -152,14 +151,42 @@ const getHeatmapAndStreaks = async (req, res) => {
       longestStreak
     });
   } catch (err) {
-    console.error("❌ Error generating streaks:", err.message);
+    console.error("Error generating streaks:", err.message);
     res.status(500).json({ message: "Error fetching heatmap data", error: err.message });
   }
 };
+
+const GitHubStat = require("../models/GitHubStat"); // ensure this model exists and is correct
+
+const getWeeklyPRStats = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const stats = await GitHubStat.find({
+      user: userId,
+      date: { $gte: sevenDaysAgo.toISOString().split("T")[0] },
+    }).sort({ date: 1 });
+
+    const prStats = stats.map((entry) => ({
+      date: entry.date.toISOString().split("T")[0],
+      pullRequests: entry.pullRequests || 0,
+    }));
+
+    res.status(200).json(prStats);
+  } catch (err) {
+    console.error(" Error fetching weekly PR stats:", err.message);
+    res.status(500).json({ message: "Error fetching PR stats", error: err.message });
+  }
+};
+
 
 module.exports = {
   getGithubProfile,
   getGithubRepos,
   trackCommitHistory,
-  getHeatmapAndStreaks
+  getHeatmapAndStreaks,
+  getWeeklyPRStats
 };

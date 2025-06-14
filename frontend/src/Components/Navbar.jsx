@@ -20,8 +20,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between px-6 py-4 bg-white border-b shadow-sm">
-      <div className="text-xl font-bold text-gray-800">DevMetrics</div>
+    <nav className="flex items-center justify-between px-6 py-4 bg-gray-900 text-gray-200 border-b shadow-sm">
+      <div className="text-xl font-bold text-purple-400">DevMetrics</div>
 
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
@@ -30,7 +30,7 @@ const Navbar = () => {
             alt="avatar"
             className="w-8 h-8 rounded-full border"
           />
-          <span className="font-medium text-gray-700">
+          <span className="font-medium text-gray-300">
             {user?.username || "User"}
           </span>
         </div>

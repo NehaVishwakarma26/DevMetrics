@@ -13,12 +13,7 @@ const Navbar = () => {
 
         {/* Nav Links */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="#features" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
-            Features
-          </a>
-          <a href="#preview" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
-            Preview
-          </a>
+        
        
           <Link to="/login">
             <button className="ml-4 px-4 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition">
