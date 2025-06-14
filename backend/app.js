@@ -14,7 +14,7 @@ connectDB()
 const app=express()
 
 app.use(cors({
-    origin:["http://localhost:5173"],
+    origin:["https://dev-metrics-five.vercel.app"],
     credentials:true
 }));
 app.use(cookieParser());

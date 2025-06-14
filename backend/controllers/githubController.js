@@ -6,7 +6,7 @@ const jwt=require("jsonwebtoken")
 // GitHub redirects the user back to your app with a code in the query string.
 const githubLogin=(req,res)=>{
     const clientId=process.env.GITHUB_CLIENT_ID;
-    const redirectUri="http://localhost:5000/api/github/callback";
+    const redirectUri="https://devmetrics-api.onrender.com/api/github/callback";
     const githubAuthUrl=`https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user`
 res.redirect(githubAuthUrl)
 
@@ -26,7 +26,7 @@ const githubCallback=async (req,res)=>{
             client_id:process.env.GITHUB_CLIENT_ID,
             client_secret:process.env.GITHUB_CLIENT_SECRET,
             code,
-            redirect_uri:"http://localhost:5000/api/github/callback"
+            redirect_uri:"https://devmetrics-api.onrender.com/api/github/callback"
         },
         {
             headers:{
@@ -58,7 +58,7 @@ const token=jwt.sign({id:user._id,username:user.username},process.env.JWT_SECRET
 })
 
 res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
-res.redirect("http://localhost:5173/dashboard");
+res.redirect("https://dev-metrics-five.vercel.app/dashboard");
 
 
 }
