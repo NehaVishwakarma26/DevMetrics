@@ -12,7 +12,7 @@ const cors=require("cors")
 const connectDB=require("./config/db")
 connectDB()
 const app=express()
-
+app.set('trust proxy', 1); 
 app.use(cors({
     origin:["https://dev-metrics-five.vercel.app"],
     credentials:true
