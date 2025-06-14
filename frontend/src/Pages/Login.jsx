@@ -4,7 +4,7 @@ import {Github} from "lucide-react"
 const Login = () => {
   const handleLogin = () => {
     // This redirects the browser (not an axios call)
-    window.location.href = "http://localhost:5000/api/github/login";
+    window.location.href = "https://devmetrics-api.onrender.com/api/github/login";
   };
 
   return (
