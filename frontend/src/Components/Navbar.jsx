@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:5000/api/users/logout", {},{
+      await axios.post("https://devmetrics-api.onrender.com/api/github/logout", {},{
         withCredentials: true,
       });
       navigate("/");
