@@ -65,9 +65,14 @@ res.redirect("https://dev-metrics-five.vercel.app/dashboard");
 
 }
 
-const logout=async (req,res)=>{
-    res.clearCookie("token")
-    res.status(200).json({msg:"logged out successfully"})
-}
+const logout = async (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+    path: "/",
+  });
+  res.status(200).json({ msg: "Logged out successfully" });
+};
 
 module.exports={githubCallback,githubLogin,logout}
