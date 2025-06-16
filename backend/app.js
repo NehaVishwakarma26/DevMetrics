@@ -7,11 +7,13 @@ const analyticsRoutes=require("./routes/analyticsRoutes")
 const githubRoutes=require("./routes/githubRoutes");
 
 const githubDataRoutes = require("./routes/githubDataRoutes");
+const teamRoutes=require("./routes/teamRoutes")
 const apiLimiter=require("./middlewares/rateLimit")
 const cors=require("cors")
 const connectDB=require("./config/db")
 connectDB()
 const app=express()
+// trust proxy is used to trust the proxy server
 app.set('trust proxy', 1); 
 app.use(cors({
     origin:["https://dev-metrics-five.vercel.app"],
@@ -31,5 +33,5 @@ app.use("/api/github",githubRoutes)
 app.use("/api/githubData", githubDataRoutes);
 app.use("/api/analytics",analyticsRoutes);
 app.use("/api/goals", goalsRoutes);
-
+app.use("/api/team",teamRoutes)
 module.exports=app

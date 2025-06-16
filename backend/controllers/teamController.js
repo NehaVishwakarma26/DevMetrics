@@ -23,3 +23,19 @@ export const createTeam=async (req,res)=>{
         res.status(500).json({success:false,message:"Server error"})
     }
 }
+
+export const getUserTeams=async(req,res)=>{
+    try{
+        const userId=req.user._id;
+        const teams=await Team.find({members:userId}).populate("owner","username").populate("members","username")
+
+        res.status(200).json({success:true,teams})
+    }
+    catch(err)
+    {
+        console.error(err);
+        res.status(500).json({success:false,message:"Server error"})
+    
+
+    }
+}
