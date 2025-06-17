@@ -1,4 +1,4 @@
-const require = require("express");
+const express = require("express");
 const { createTeam, getUserTeams} = require("../controllers/teamController.js")
 const requireAuth =( "../middlewares/authMiddleware.js");
 
