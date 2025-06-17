@@ -9,7 +9,6 @@ const [usernameInput,setUsernameInput]=useState("")
 const [suggestions,setSuggestions]=useState([])
 const [selectedmembers,setSelectedMembers]=useState([])
 const [loading,setLoading]=useState(false)
-const [repoInput,setRepoInput]=useState("")
 const [repoSuggestions,setRepoSuggestions]=useState([])
 const [selectedRepo,setSelectedRepo]=useState("")
 

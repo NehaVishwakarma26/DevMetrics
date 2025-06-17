@@ -19,8 +19,10 @@ const getGithubProfile = async (req, res) => {
 
 const getGithubRepos = async (req, res) => {
   try {
+    console.log(req.user)
     const user = await User.findById(req.user._id);
     const response = await axios.get(`https://api.github.com/users/${user.username}/repos`);
+    console.log(response)
     res.status(200).json(response.data);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch GitHub repos", error: err.message });
