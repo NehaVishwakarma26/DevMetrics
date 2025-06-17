@@ -7,6 +7,8 @@ const API = axios.create({
 
 // ----------- Auth -----------
 export const getCurrentUser = () => API.get("/users/me");
+//search by username
+export const searchUsersByUsername=(query)=>API.get(`/users/search?query=${query}`)
 
 // ----------- Analytics -----------
 export const getAnalytics = () => API.get("/analytics");
