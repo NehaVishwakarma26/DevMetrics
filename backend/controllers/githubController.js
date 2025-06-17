@@ -49,10 +49,14 @@ if(!user)
     user=await User.create({
         username:githubUser.login,
         githubId:githubUser.id,
-        avatar:githubUser.avatar_url
+        avatar:githubUser.avatar_url,
+        accessToken:accessToken
     })
 }
-
+else{
+    user.accessToken=accessToken;
+    await user.save()
+}
 const token=jwt.sign({id:user._id,username:user.username},process.env.JWT_SECRET,{
     expiresIn:"1h"
 })

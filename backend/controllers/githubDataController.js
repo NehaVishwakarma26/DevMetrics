@@ -21,7 +21,19 @@ const getGithubRepos = async (req, res) => {
   try {
     console.log(req.user)
     const user = await User.findById(req.user._id);
-    const response = await axios.get(`https://api.github.com/users/${user.username}/repos`);
+
+if(!user || !user.accessToken)
+{
+  return res.status(400).json({message:"Github access token not found"})
+
+}
+
+    const response = await axios.get(`https://api.github.com/user/repos`,{
+      headers:{
+        Authorization:`Bearer ${user.accessToken}`,
+        Accept:"application/vnd.github+json"
+      }
+    });
     console.log(response)
     res.status(200).json(response.data);
   } catch (err) {

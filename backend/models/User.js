@@ -14,6 +14,10 @@ const userSchema=new mongoose.Schema({
         enum:["user","admin"],
         default:"user"
     },
+    accessToken:{
+        type:String,
+        required:false
+    }
 },{timestamps:true})
 
 module.exports = mongoose.model("User", userSchema);
