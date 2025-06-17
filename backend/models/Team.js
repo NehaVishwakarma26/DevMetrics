@@ -14,7 +14,11 @@ members:[
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     }
-]  
+],
+repo:{
+    type:String,
+    required:true
+}
 
 },{timestamps:true})
 

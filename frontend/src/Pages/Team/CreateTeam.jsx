@@ -1,6 +1,6 @@
 import React from 'react'
-import { useState } from 'react'
-import {searchUsersByUsername,createTeam} from "../../services/api"
+import { useState ,useEffect} from 'react'
+import {searchUsersByUsername,createTeam,getGithubRepos} from "../../services/api"
 import {useAuth} from "../../context/AuthContext"
 const CreateTeam = () => {
 const {user}=useAuth()
@@ -9,6 +9,9 @@ const [usernameInput,setUsernameInput]=useState("")
 const [suggestions,setSuggestions]=useState([])
 const [selectedmembers,setSelectedMembers]=useState([])
 const [loading,setLoading]=useState(false)
+const [repoInput,setRepoInput]=useState("")
+const [repoSuggestions,setRepoSuggestions]=useState([])
+const [selectedRepo,setSelectedRepo]=useState("")
 
 const fetchSuggestions=async (query)=>{
   
@@ -45,7 +48,7 @@ const handleSubmit=async(e)=>{
 try{
   setLoading(true)
   const finalMembers=[...selectedmembers,user.username]
-  const res=await createTeam({name:teamName,memberUsernames:finalMembers})
+  const res=await createTeam({name:teamName,memberUsernames:finalMembers,repo:selectedRepo})
   console.log(res)
   alert("Team Created Successfully")
   setTeamName("")
@@ -61,6 +64,21 @@ finally{
 }
 
 }
+
+useEffect(()=>{
+const fetchRepos=async ()=>{
+  try{
+    const res=await getGithubRepos();
+    setRepoSuggestions(res.data)
+  }
+  catch(err)
+  {
+    console.error("Failed to fetch repos",err.message)
+  }
+}
+
+fetchRepos()
+},[])
 
   return (
     <div className='p-6 bg-gray-900 text-gray-100 rounded-xl shadow-lg'>
@@ -111,6 +129,20 @@ finally{
               >X</button>
             </span>
           ))}
+        </div>
+
+        <div>
+          <label>Add Repo</label>
+     <select value={selectedRepo} onChange={(e)=>setSelectedRepo(e.target.value)}>
+      <option value="">Select Team Repository</option>
+      {
+        repos.map((repo)=>(
+          <option key={repo.id} value={repo.full_name}>
+            {repo.full_name}
+          </option>
+        ))
+      }
+     </select>
         </div>
 
 <button disabled={loading} type="submit"       className={`w-full py-2 rounded text-white font-semibold ${

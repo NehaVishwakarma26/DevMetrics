@@ -4,7 +4,7 @@ const  User= require("../models/User.js");
 //create a team
  const createTeam=async (req,res)=>{
     try{
-        const {name,memberUsernames}=req.body;
+        const {name,memberUsernames,repo}=req.body;
         const ownerId=req.user._id;
 //find all users in the User collection whose username is in the array memberUsernames
         const members=await User.find({username:{$in:memberUsernames}})
@@ -12,7 +12,8 @@ const  User= require("../models/User.js");
         const team=await Team.create({
             name,
             owner:ownerId,
-            members:members.map(user=>user._id)
+            members:members.map(user=>user._id),
+            repo
         })
 
         res.status(201).json({success:true,team})
