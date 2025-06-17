@@ -130,19 +130,24 @@ fetchRepos()
           ))}
         </div>
 
-        <div>
-          <label>Add Repo</label>
-     <select value={selectedRepo} onChange={(e)=>setSelectedRepo(e.target.value)}>
-      <option value="">Select Team Repository</option>
-      {
-        repoSuggestions.map((repo)=>(
-          <option key={repo.id} value={repo.full_name}>
-            {repo.full_name}
-          </option>
-        ))
-      }
-     </select>
-        </div>
+  <div className="w-full max-w-md">
+  <label className="block mb-2 text-sm font-medium text-teal-400">Add Repo</label>
+  <select
+    value={selectedRepo}
+    onChange={(e) => setSelectedRepo(e.target.value)}
+    className="w-full p-2 rounded-xl bg-gray-800 border border-purple-600 text-white focus:outline-none focus:ring-2 focus:ring-teal-400 transition"
+  >
+    <option value="" className="text-gray-400">
+      Select Team Repository
+    </option>
+    {repoSuggestions.map((repo) => (
+      <option key={repo.id} value={repo.full_name}>
+        {repo.full_name}
+      </option>
+    ))}
+  </select>
+</div>
+
 
 <button disabled={loading} type="submit"       className={`w-full py-2 rounded text-white font-semibold ${
           loading
