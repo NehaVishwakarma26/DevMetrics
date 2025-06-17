@@ -45,7 +45,7 @@ const handleSubmit=async(e)=>{
 try{
   setLoading(true)
   const finalMembers=[...selectedmembers,user.username]
-  const res=await createTeam({name:teamName,owner:user._id,members:finalMembers})
+  const res=await createTeam({name:teamName,memberUsernames:finalMembers})
   console.log(res)
   alert("Team Created Successfully")
   setTeamName("")
@@ -63,7 +63,7 @@ finally{
 }
 
   return (
-    <div>
+    <div className='p-6 text-gray-600 dark:text-gray-800 '>
       <h2>Create Team</h2>
       <form onSubmit={handleSubmit}>
         <div>
