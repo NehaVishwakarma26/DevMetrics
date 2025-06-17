@@ -104,11 +104,11 @@ finally{
         <div className='flex flex-wrap gap-2'>
           {selectedmembers.map((username)=>(
             <span key={username}
-            className='bg-purple-600 px-3 py-1 rounded-full text-sm flex items-center gap-2'
+            className='bg-purple-600 px-3 py-3 rounded-full text-sm flex items-center gap-2'
             >{username}
             <button type='button' onClick={()=>handleRemoveMember(username)}
               className='text-xs text-white bg-red-500 hover:bg-red-600 px-2 rounded'
-              >Remove</button>
+              >X</button>
             </span>
           ))}
         </div>
