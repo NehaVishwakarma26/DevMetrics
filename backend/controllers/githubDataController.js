@@ -19,7 +19,7 @@ const getGithubProfile = async (req, res) => {
 
 const getGithubRepos = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user._id);
     const response = await axios.get(`https://api.github.com/users/${user.username}/repos`);
     res.status(200).json(response.data);
   } catch (err) {
