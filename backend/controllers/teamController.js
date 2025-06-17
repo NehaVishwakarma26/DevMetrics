@@ -1,5 +1,5 @@
-import Team  from "../models/Team";
-import User from "../models/User";
+import Team  from "../models/Team.js";
+import User from "../models/User.js";
 
 //create a team
 export const createTeam=async (req,res)=>{
