@@ -63,47 +63,61 @@ finally{
 }
 
   return (
-    <div className='p-6 text-gray-600 dark:text-gray-800 '>
-      <h2>Create Team</h2>
-      <form onSubmit={handleSubmit}>
+    <div className='p-6 bg-gray-900 text-gray-100 rounded-xl shadow-lg'>
+      <h2 className='text-2xl font-bold mb-4 text-purple-400'>Create Team</h2>
+      <form onSubmit={handleSubmit} className='space-y-6'>
         <div>
-          <label>Team Name:</label>
+          <label className='block mb-1'>Team Name:</label>
           <input
             type="text"
             value={teamName}
             onChange={(e) => setTeamName(e.target.value)}
+            className='w-full p-2 rounded bg-gray-800 border-gray-700 focus:outline-none focus:border-purple-500'
           />
 
           <div>
-            <label>Add Members</label>
+            <label className='block mb-1'>Add Members</label>
             <input type="text" value={usernameInput} onChange={(e)=>{
               setUsernameInput(e.target.value)
               fetchSuggestions(e.target.value)
             }}
-            placeholder='Search By Username'/>
+            placeholder='Search By Username'
+            className='w-full p-2 rounded bg-gray-800 border-gray-700 focus:outline-none focus:border-purple-500'
+            />
           
           </div>
           {suggestions.length>0 && (
-            <ul>
+            <ul className='bg-gray-800 mt-2 rounded shadow text-sm'>
               {suggestions.map((user)=>(
                 <li key={user.username}
-                onClick={()=>handleAddMember(user.username)}>
+                onClick={()=>handleAddMember(user.username)}
+                className='px-3 py-2 cursor-pointer hover:bg-teal-600'
+                >
                   {user.username}
+                  
                 </li>
               ))}
             </ul>
           )}
 
         </div>
-        <div>
+        <div className='flex flex-wrap gap-2'>
           {selectedmembers.map((username)=>(
-            <span key={username}>{username}
-            <button type='button' onClick={()=>handleRemoveMember(username)}>Remove</button>
+            <span key={username}
+            className='bg-purple-600 px-3 py-1 rounded-full text-sm flex items-center gap-2'
+            >{username}
+            <button type='button' onClick={()=>handleRemoveMember(username)}
+              className='text-xs text-white bg-red-500 hover:bg-red-600 px-2 rounded'
+              >Remove</button>
             </span>
           ))}
         </div>
 
-<button disabled={loading} type="submit" >{loading?"Creating Team...":"Create Team" } </button>
+<button disabled={loading} type="submit"       className={`w-full py-2 rounded text-white font-semibold ${
+          loading
+            ? 'bg-gray-700 cursor-not-allowed'
+            : 'bg-purple-600 hover:bg-teal-500 transition duration-200'
+        }`}>{loading?"Creating Team...":"Create Team" } </button>
 
 
       </form>
