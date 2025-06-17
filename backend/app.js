@@ -16,7 +16,7 @@ const app=express()
 // trust proxy is used to trust the proxy server
 app.set('trust proxy', 1); 
 app.use(cors({
-    origin:["https://dev-metrics-five.vercel.app"],
+    origin:["https://dev-metrics-five.vercel.app","http://localhost:5173"],
     credentials:true
 }));
 app.use(cookieParser());

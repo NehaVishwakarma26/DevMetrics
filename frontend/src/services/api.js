@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://devmetrics-api.onrender.com/api",
-  withCredentials: true, // sends JWT cookie
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true,
 });
 
 // ----------- Auth -----------
