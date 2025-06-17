@@ -53,4 +53,37 @@ const getUserTeams=async(req,res)=>{
     }
 }
 
-module.exports = { createTeam, getUserTeams };
+const validateUsernames=async (req,res)=>{
+    try{
+        //get the username array
+        const {usernames}=req.body;
+//check if usernames is an array
+if(!Array.isArray(usernames))
+{
+    return res.status(400).json({success:false,message:"Invalid Input"})
+
+}
+
+//search the db for all users whose username is in the provided array
+const foundUsers=await User.find({username:{$in:usernames}}).select("username")
+
+//convert the list of valid usernames into a set for fast lookup
+const foundSet=new Set(foundUsers.map((u)=>u.username))
+
+//loop thru the original input list n collect any usernames not found in the db
+const invalidUsernames=usernames.filter((u)=>!foundSet.has(u))
+
+if(invalidUsernames.length>0)
+{
+    return res.status(400).json({success:false,invalidUsernames})
+}
+res.status(200).json({success:true})
+    }
+    catch(err)
+    {
+        console.error(err);
+        res.status(500).json({success:false,message:"Server error"})
+    }
+}
+
+module.exports = { createTeam, getUserTeams, validateUsernames };
