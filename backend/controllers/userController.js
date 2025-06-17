@@ -27,11 +27,11 @@ const searchUsersByUsername=async (req,res)=>{
                 message:"Please enter a valid query"
             })
         }
-        else{
+        
             const users=await User.find({
                 username:{$regex:query,$options:"i"}
             }).select("username");
-        }
+        
         res.json({success:true,users})
 
     }
