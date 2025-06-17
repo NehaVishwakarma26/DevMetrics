@@ -1,8 +1,8 @@
-import Team  from "../models/Team.js";
-import User from "../models/User.js";
+const Team  =require( "../models/Team.js");
+const  User= require("../models/User.js");
 
 //create a team
-export const createTeam=async (req,res)=>{
+ const createTeam=async (req,res)=>{
     try{
         const {name,memberUsernames}=req.body;
         const ownerId=req.user._id;
@@ -24,7 +24,7 @@ export const createTeam=async (req,res)=>{
     }
 }
 
-export const getUserTeams=async(req,res)=>{
+const getUserTeams=async(req,res)=>{
     try{
       const userId = req.user._id;
       //"owner","username" replaces the _id field with the username field
@@ -52,3 +52,5 @@ export const getUserTeams=async(req,res)=>{
 
     }
 }
+
+module.exports = { createTeam, getUserTeams };

@@ -1,5 +1,4 @@
-import mongoose, { mongo } from "mongoose"
-
+const mongoose = require("mongoose");
 const teamSchema=new mongoose.Schema({
     name:{
         type:String,
@@ -22,5 +21,4 @@ members:[
 }
 },{timestamps:true})
 
-const Team=mongoose.model("Team",teamSchema)
-export default Team
+module.exports = mongoose.model("Team", teamSchema);
