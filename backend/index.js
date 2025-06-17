@@ -6,6 +6,9 @@ if (process.env.NODE_ENV === "production") {
   dotenv.config({ path: ".env.development" });
 }
 
+const connectDB=require("./config/db")
+connectDB()
+
 const app=require("./app")
 
 

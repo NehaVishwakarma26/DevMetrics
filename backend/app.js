@@ -10,8 +10,7 @@ const githubDataRoutes = require("./routes/githubDataRoutes");
 const teamRoutes=require("./routes/teamRoutes")
 const apiLimiter=require("./middlewares/rateLimit")
 const cors=require("cors")
-const connectDB=require("./config/db")
-connectDB()
+
 const app=express()
 // trust proxy is used to trust the proxy server
 app.set('trust proxy', 1); 
