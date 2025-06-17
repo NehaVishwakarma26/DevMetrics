@@ -136,7 +136,7 @@ fetchRepos()
      <select value={selectedRepo} onChange={(e)=>setSelectedRepo(e.target.value)}>
       <option value="">Select Team Repository</option>
       {
-        repos.map((repo)=>(
+        repoSuggestions.map((repo)=>(
           <option key={repo.id} value={repo.full_name}>
             {repo.full_name}
           </option>
