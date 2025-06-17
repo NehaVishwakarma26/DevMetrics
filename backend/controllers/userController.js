@@ -29,7 +29,7 @@ const searchUsersByUsername=async (req,res)=>{
         }
         
             const users=await User.find({
-                username:{$regex:query,$options:"i"}
+                username:{$regex:query,$options:"i",$ne:req.user.username}
             }).select("username");
         
         res.json({success:true,users})
