@@ -29,4 +29,11 @@ export const trackCommits = () => API.get("/githubData/github/commitHistory");
 export const getHeatmapAndStreaks = () => API.get("/githubData/github/heatmap?sinceDays=365");
 // ---------- Insight --------------------------
 export const getSmartSuggestions=()=>API.get("/analytics/smart-suggestions")
+
+// ----------- Team ----------------------------
+export const getUserTeams=()=>API.get("/teams/my")
+
+export const createTeam=(data)=API.post("/teams/create",data)
+
+
 export default API;

@@ -6,6 +6,7 @@ import Goals from "./Pages/Goals";
 import Stats from "./Pages/Stats/Stats";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Home from "./Pages/Home/Home";
+import CreateTeam from "./Pages/Team/CreateTeam";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route index element={<Dashboard />} />
           <Route path="goals" element={<Goals />} />
           <Route path="stats" element={<Stats />} />
+          <Route path="createTeam" element={<CreateTeam/>}/>
         </Route>
       </Route>
     </Routes>
