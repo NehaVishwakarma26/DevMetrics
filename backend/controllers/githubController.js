@@ -31,8 +31,8 @@ const githubCallback=async (req,res)=>{
             client_id:process.env.GITHUB_CLIENT_ID,
             client_secret:process.env.GITHUB_CLIENT_SECRET,
             code,
-            // redirect_uri:"https://devmetrics-api.onrender.com/api/github/callback"
-            redirect_uri:"http://localhost:5000/api/github/callback"
+            redirect_uri:"https://devmetrics-api.onrender.com/api/github/callback"
+            // redirect_uri:"http://localhost:5000/api/github/callback"
         },
         {
             headers:{
@@ -76,12 +76,12 @@ res.cookie("token", token, { httpOnly: true,
   secure: true });
   console.log("Redirecting to LOCALHOST dashboard...");
 
-res.redirect("http://localhost:5173/dashboard")
+res.redirect("https://dev-metrics-five.vercel.app/dashboard");
 
 
 }
+// res.redirect("http://localhost:5173/dashboard")
 
-// res.redirect("https://dev-metrics-five.vercel.app/dashboard");
 
 
 
