@@ -6,7 +6,8 @@ import {
   Goal,
   BarChart,
   Settings,
-  CirclePlus
+  CirclePlus,
+  Users
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -33,6 +34,10 @@ const Sidebar = () => {
         <NavLink to="/dashboard/createTeam" className={linkClasses}>
         <CirclePlus size={20}/>
         Create Team
+        </NavLink>
+        <NavLink to="/dashboard/myTeam" className={linkClasses}>
+          <Users size={20} />
+          My Team
         </NavLink>
     
       </div>

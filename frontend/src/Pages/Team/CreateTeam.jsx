@@ -131,11 +131,11 @@ fetchRepos()
         </div>
 
   <div className="w-full max-w-md">
-  <label className="block mb-2 text-sm font-medium text-teal-400">Add Repo</label>
+  <label className="block mb-1">Add Repo</label>
   <select
     value={selectedRepo}
     onChange={(e) => setSelectedRepo(e.target.value)}
-    className="w-full p-2 rounded-xl bg-gray-800 border border-purple-600 text-white focus:outline-none focus:ring-2 focus:ring-teal-400 transition"
+    className="w-full p-2 rounded-xl bg-gray-800 border border-purple-600 text-white "
   >
     <option value="" className="text-gray-400">
       Select Team Repository

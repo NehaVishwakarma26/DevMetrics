@@ -2,6 +2,8 @@ const axios = require("axios");
 const User = require("../models/User");
 const CommitHistory = require("../models/CommitHistory");
 
+const GithubStat=require("../models/GitHubStat")
+
 const getGithubProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -34,7 +36,7 @@ if(!user || !user.accessToken)
         Accept:"application/vnd.github+json"
       }
     });
-    console.log(response)
+    // console.log(response)
     res.status(200).json(response.data);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch GitHub repos", error: err.message });
@@ -170,7 +172,6 @@ const getHeatmapAndStreaks = async (req, res) => {
   }
 };
 
-const GitHubStat = require("../models/GitHubStat"); // ensure this model exists and is correct
 
 const getWeeklyPRStats = async (req, res) => {
   try {
@@ -179,7 +180,7 @@ const getWeeklyPRStats = async (req, res) => {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    const stats = await GitHubStat.find({
+    const stats = await GithubStat.find({
       user: userId,
       date: { $gte: sevenDaysAgo.toISOString().split("T")[0] },
     }).sort({ date: 1 });
@@ -196,11 +197,123 @@ const getWeeklyPRStats = async (req, res) => {
   }
 };
 
+const fetchAndSaveGithubStats = async (user, targetDate = new Date()) => {
+  const { username, accessToken, _id: userId } = user;
+
+  const headers = {
+    Authorization: `token ${accessToken}`,
+    Accept: "application/vnd.github+json",
+  };
+
+  // Step 1: Get user's GitHub login
+  const userInfoRes = await axios.get("https://api.github.com/user", { headers });
+  const loginUsername = userInfoRes.data.login;
+
+  // Step 2: Get user's repos
+  const repoRes = await axios.get(
+    `https://api.github.com/users/${username}/repos?per_page=50`,
+    { headers }
+  );
+  const repos = repoRes.data;
+
+  // Step 3: Normalize date
+  const date = new Date(targetDate);
+  date.setHours(0, 0, 0, 0);
+  const dateStr = date.toISOString().split("T")[0];
+
+  // Step 4: Skip if already synced
+  const alreadySynced = await GithubStat.findOne({ user: userId, date });
+  if (alreadySynced) return;
+
+  let dailyCommits = 0;
+  const perRepoCommits = {};
+  const perRepoPRs = {}; //
+  const since = new Date(date);
+  const until = new Date(date);
+  until.setDate(since.getDate() + 1);
+
+  // Step 5: Count commits per repo
+  for (const repo of repos) {
+    const repoOwner = repo.owner?.login || username;
+    const url = `https://api.github.com/repos/${repoOwner}/${repo.name}/commits`;
+
+    try {
+      const res = await axios.get(url, {
+        headers,
+        params: {
+          author: loginUsername,
+          since: since.toISOString(),
+          until: until.toISOString(),
+        },
+      });
+
+      let validCommitsInThisRepo = 0;
+      for (const commit of res.data) {
+        const authorLogin = commit.author?.login;
+        const commitEmail = commit.commit?.author?.email || "";
+        const commitName = commit.commit?.author?.name || "";
+
+        if (
+          (authorLogin && authorLogin.toLowerCase() === loginUsername.toLowerCase()) ||
+          commitEmail.toLowerCase().includes(username.toLowerCase()) ||
+          commitName.toLowerCase().includes(username.toLowerCase())
+        ) {
+          dailyCommits++;
+          validCommitsInThisRepo++;
+        }
+      }
+
+      perRepoCommits[repo.name] = validCommitsInThisRepo;
+    } catch (err) {
+      console.log(`Error fetching commits for ${repo.name}: ${err.message}`);
+    }
+
+    //  Step 6: Count PRs for this repo
+    try {
+      const prRes = await axios.get(
+        `https://api.github.com/search/issues?q=repo:${repoOwner}/${repo.name}+type:pr+author:${loginUsername}+created:${dateStr}`,
+        { headers }
+      );
+      perRepoPRs[repo.name] = prRes.data.total_count || 0;
+    } catch (err) {
+      console.log(` Error fetching PRs for ${repo.name}: ${err.message}`);
+    }
+  }
+
+  // Step 7: Fetch total PRs and Issues across all repos
+  const prsRes = await axios.get(
+    `https://api.github.com/search/issues?q=involves:${loginUsername}+type:pr+created:${dateStr}`,
+    { headers }
+  );
+
+  const issuesRes = await axios.get(
+    `https://api.github.com/search/issues?q=author:${loginUsername}+type:issue+created:${dateStr}`,
+    { headers }
+  );
+
+  // Step 8: Save stats
+  await GithubStat.findOneAndUpdate(
+    { user: userId, date },
+    {
+      commits: dailyCommits,
+      pullRequests: prsRes.data.total_count,
+      issues: issuesRes.data.total_count,
+      perRepoCommits,
+      perRepoPRs, // saving new field
+    },
+    { upsert: true, new: true }
+  );
+
+  console.log(` Synced ${dailyCommits} commits, ${prsRes.data.total_count} PRs, ${issuesRes.data.total_count} issues for ${dateStr}`);
+};
+
+
 
 module.exports = {
   getGithubProfile,
   getGithubRepos,
   trackCommitHistory,
   getHeatmapAndStreaks,
-  getWeeklyPRStats
+  getWeeklyPRStats,
+  fetchAndSaveGithubStats
 };

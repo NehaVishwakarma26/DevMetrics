@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {getAnalytics} from "../services/api"
+import {getAnalytics,sync} from "../services/api"
 
 const Dashboard = () => {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+const handleSync = async () => {
+  try {
+    const res = await sync();
+    console.log(res.data.message);
+    alert("GitHub stats updated!");
+  } catch (err) {
+    console.error("Sync failed", err);
+    alert("Failed to sync stats");
+  }
+};
 
   const fetchAnalytics = async () => {
     try {
@@ -64,6 +75,13 @@ const Dashboard = () => {
           </a>
         </div>
       </div>
+      <button
+  onClick={handleSync}
+  className="bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded-xl text-white font-semibold"
+>
+  Sync GitHub Stats
+</button>
+
     </div>
   );
 };

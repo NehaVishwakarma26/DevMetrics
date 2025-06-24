@@ -11,6 +11,20 @@ const statSchema=new mongoose.Schema({
     commits:Number,
     pullRequests:Number,
     issues:Number,
+    perRepoCommits: {
+  type: Map,
+  of: Number,
+  default: {},
+},
+perRepoPRs: {
+  type: Map,
+  of: Number,
+  default: {},
+},
+
+
 },{timestamps:true})
+
+
 
 module.exports=mongoose.model("GitHubStat",statSchema)

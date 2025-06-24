@@ -1,12 +1,17 @@
 const axios = require("axios");
 const User=require("../models/User")
+
+const GithubStat=require("../models/GitHubStat")
 const jwt=require("jsonwebtoken")
+
+const {fetchAndSaveGithubStats} =require("./githubDataController")
 
 //When this route is hit, user is redirected to GitHub to log in and authorize your app.
 // GitHub redirects the user back to your app with a code in the query string.
-const githubLogin=(req,res)=>{
+const githubLogin=async (req,res)=>{
     const clientId=process.env.GITHUB_CLIENT_ID;
     const redirectUri="https://devmetrics-api.onrender.com/api/github/callback";
+    // const redirectUri = "http://localhost:5000/api/github/callback";
     const githubAuthUrl=`https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user`
 res.redirect(githubAuthUrl)
 
@@ -26,7 +31,8 @@ const githubCallback=async (req,res)=>{
             client_id:process.env.GITHUB_CLIENT_ID,
             client_secret:process.env.GITHUB_CLIENT_SECRET,
             code,
-            redirect_uri:"https://devmetrics-api.onrender.com/api/github/callback"
+            // redirect_uri:"https://devmetrics-api.onrender.com/api/github/callback"
+            redirect_uri:"http://localhost:5000/api/github/callback"
         },
         {
             headers:{
@@ -57,6 +63,10 @@ else{
     user.accessToken=accessToken;
     await user.save()
 }
+
+    await fetchAndSaveGithubStats(user);
+
+
 const token=jwt.sign({id:user._id,username:user.username},process.env.JWT_SECRET,{
     expiresIn:"1h"
 })
@@ -64,10 +74,16 @@ const token=jwt.sign({id:user._id,username:user.username},process.env.JWT_SECRET
 res.cookie("token", token, { httpOnly: true,
   sameSite: "None",
   secure: true });
-res.redirect("https://dev-metrics-five.vercel.app/dashboard");
+  console.log("Redirecting to LOCALHOST dashboard...");
+
+res.redirect("http://localhost:5173/dashboard")
 
 
 }
+
+// res.redirect("https://dev-metrics-five.vercel.app/dashboard");
+
+
 
 const logout = async (req, res) => {
   res.clearCookie("token", {
@@ -79,4 +95,23 @@ const logout = async (req, res) => {
   res.status(200).json({ msg: "Logged out successfully" });
 };
 
-module.exports={githubCallback,githubLogin,logout}
+const syncGithubStats = async (req, res) => {
+  try {
+    const user = req.user;
+
+    for (let i = 0; i < 7; i++) {
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() - i);
+      await fetchAndSaveGithubStats(user, targetDate);
+    }
+
+    res.status(200).json({ success: true, message: "Last 7 days synced" });
+  } catch (err) {
+    console.error("Sync error:", err.message);
+    res.status(500).json({ success: false, message: "Failed to sync stats." });
+  }
+};
+
+
+
+module.exports={githubCallback,githubLogin,logout,syncGithubStats}

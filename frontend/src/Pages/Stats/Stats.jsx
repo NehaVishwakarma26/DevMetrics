@@ -142,9 +142,9 @@ return (
 
     {/* Mid Section: Commits bar + Weekly line chart */}
     <div className="flex flex-col md:flex-row gap-6 justify-between">
-      <div className="flex-1">
+      {/* <div className="flex-1">
         <CommitsBarChart commitCounts={lastSevenDaysCommits} />
-      </div>
+      </div> */}
       <div className="flex-1">
         <WeeklyLineChart commits={weeklyCommitCount} />
       </div>

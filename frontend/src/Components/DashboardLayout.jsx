@@ -3,10 +3,29 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
-
+import {saveStats} from "../services/api"
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 const DashboardLayout = () => {
-  console.log("DashboardLayout rendered");
 
+const {user}=useAuth()
+
+  console.log("DashboardLayout rendered");
+useEffect(()=>{
+  const syncGithubStats=async ()=>{
+    try{
+      const res=await saveStats();
+      console.log("github stats synced",res.data)
+    }
+    catch(err)
+    {
+      console.error("failed to sync github stats")
+    }
+  }
+
+  if(user?.username)
+  syncGithubStats();
+},[user?.username])
   return (
     <div className="flex h-screen bg-gradient-to-tr from-gray-900 via-[#0f172a] to-black text-white" style={{fontFamily:'Hubot Sans'}}>
       <Sidebar />
