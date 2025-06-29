@@ -1,0 +1,15 @@
+name: Trigger Render Deployment
+
+on:
+  push:
+    branches:
+      - main  # Make sure this matches your default branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
