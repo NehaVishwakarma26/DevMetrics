@@ -47,6 +47,7 @@ return ()=>{
 
  useEffect(()=>{
     socket.on("receive-message",(data)=>{
+      console.log("got message from serveer:",msg)
         setMessages((prev)=>[...prev,data]);
     })
 

@@ -22,6 +22,7 @@ try{
         image:image||null
     })
 
+    console.log("message ssaved in db:",savedMsg)
     io.to(roomId).emit("receive-message",savedMsg)
 }
 catch(err)
