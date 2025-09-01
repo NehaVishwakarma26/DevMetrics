@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 //     withCredentials:true
 // })
 
-const socket = io("https://devmetrics-api.onrender.com/api", {
+const socket = io("https://devmetrics-api.onrender.com", {
   withCredentials: true,
 });
 
