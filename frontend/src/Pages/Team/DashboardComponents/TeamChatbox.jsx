@@ -6,11 +6,14 @@ import { useAuth } from "../../../context/AuthContext";
 import { ImageUp } from 'lucide-react';
 
 const TeamChatPage = () => {
+
     const {user}=useAuth()
     const {teamId}=useParams()
   const [messages,setMessages]=useState([])
   const chatRef=useRef(null)
   const [message, setMessage] = useState("");
+
+console.log(socket)
 
 useEffect(()=>{
     chatRef.current?.scrollIntoView({behavior:"smooth"})
