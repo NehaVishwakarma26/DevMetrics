@@ -3,7 +3,7 @@ name: Trigger Render Deployment
 on:
   push:
     branches:
-      - main  # Make sure this matches your default branch name
+      - main  
 
 jobs:
   deploy:
