@@ -8,7 +8,6 @@ const axios = require("axios");
 
 const User = require("../models/User");
 const CommitHistory = require("../models/CommitHistory");
-const GithubStat = require("../models/GithubStat");
 const DashboardSummary = require("../models/DashboardSummary");
 const Notification = require("../models/Notification");
 
