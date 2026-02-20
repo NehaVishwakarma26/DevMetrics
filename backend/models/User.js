@@ -17,6 +17,10 @@ const userSchema=new mongoose.Schema({
     accessToken:{
         type:String,
         required:false
+    },
+    lastGithubSync:{
+        type:Date,
+        default:null
     }
 },{timestamps:true})
 

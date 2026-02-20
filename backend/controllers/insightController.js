@@ -70,11 +70,11 @@
 
 const OpenAI = require("openai");
 const Goal = require("../models/Goal");
-const GitHubStat = require("../models/GitHubStat");
 const CommitHistory = require("../models/CommitHistory");
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: "ollama",
+  base_url:"http://localhost:11434/v1"
 });
 
 /* ------------------------- TOOL DEFINITIONS ------------------------- */
@@ -198,7 +198,7 @@ const getSmartSuggestions = async (req, res) => {
 
     // First LLM Call (planning + tool selection)
     const firstResponse = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "llama3.2:1b",
       messages,
       tools,
       tool_choice: "auto",
@@ -224,7 +224,7 @@ const getSmartSuggestions = async (req, res) => {
 
       // Second LLM Call (final reasoning)
       const finalResponse = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "llama3.2:1b",
         messages,
       });
 
